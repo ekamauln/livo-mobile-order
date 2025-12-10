@@ -130,7 +130,6 @@ export default function AssignPickerScreen() {
         style={{
           flexDirection: "row",
           alignItems: "center",
-          gap: 4,
         }}
       >
         <TouchableOpacity
@@ -348,6 +347,7 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 8,
     alignItems: "center",
+    marginRight: 4,
   },
   pickerItem: {
     padding: 12,

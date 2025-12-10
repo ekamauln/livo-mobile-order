@@ -170,7 +170,7 @@ export default function CoordinatorDashboard() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 10, backgroundColor: "#f5f5f5" },
-  header: { flexDirection: "row", marginBottom: 15, gap: 10 },
+  header: { flexDirection: "row", marginBottom: 15 },
   search: {
     flex: 1,
     backgroundColor: "white",
@@ -178,6 +178,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: "#ddd",
+    marginRight: 10,
   },
   card: {
     padding: 15,
@@ -200,6 +201,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#3b82f6",
     borderRadius: 8,
     padding: 8,
+    marginRight: 10,
   },
   logoutBtn: {
     alignItems: "center",

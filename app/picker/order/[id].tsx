@@ -529,7 +529,6 @@ const styles = StyleSheet.create({
   },
   quantityButtonsRow: {
     flexDirection: "row",
-    gap: 10,
     justifyContent: "space-between",
   },
   quantityCancelBtn: {
@@ -538,6 +537,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: "center",
+    marginRight: 5,
   },
   quantityConfirmBtn: {
     flex: 1,
@@ -545,6 +545,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: "center",
+    marginLeft: 5,
   },
   quantityBtnText: {
     color: "white",
@@ -553,7 +554,6 @@ const styles = StyleSheet.create({
   },
   bottomButtonsContainer: {
     flexDirection: "row",
-    gap: 10,
     padding: 15,
     backgroundColor: "#f5f5f5",
     borderTopWidth: 1,
@@ -566,6 +566,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: "center",
     justifyContent: "center",
+    marginHorizontal: 5,
   },
   bottomBtnDisabled: {
     backgroundColor: "#d1d5db",
