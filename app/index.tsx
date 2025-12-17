@@ -49,7 +49,7 @@ export default function LoginScreen() {
               className="w-32 h-28 mb-1"
             />
             <Text className="text-white text-[28px] font-bold">
-              RibbonWMS
+              WMSRibbon
             </Text>
             <Text className="text-white text-xs opacity-90">
               Warehouse Management System
