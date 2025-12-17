@@ -1,11 +1,13 @@
 import { useAuth } from "@/contexts/AuthContext";
 import api from "@/services/api";
 import { Order } from "@/types/order";
+import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import { router } from "expo-router";
 import React, { useCallback, useState } from "react";
 import {
   FlatList,
+  Image,
   RefreshControl,
   StyleSheet,
   Text,
@@ -61,11 +63,11 @@ export default function PickerDashboard() {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.headerRow}>
-        <Text style={styles.header}>My Assignments</Text>
-        <TouchableOpacity style={styles.logoutBtn} onPress={logout}>
-          <Text style={styles.logoutBtnText}>Logout</Text>
+    <View className="px-4 py-5">
+      <View className="flex-row justify-between items-center mb-5">
+        <Text className="text-xl font-semibold">My Assignments</Text>
+        <TouchableOpacity onPress={logout}>
+          <Ionicons name="log-out-outline" size={28} color="red" />
         </TouchableOpacity>
       </View>
       <FlatList
@@ -73,11 +75,19 @@ export default function PickerDashboard() {
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <TouchableOpacity
-            style={styles.card}
+            className="bg-white mb-3 px-3 py-3 rounded flex-row justify-evenly"
             onPress={() => router.push(`/picker/order/${item.id}`)}
           >
-            <Text style={styles.title}>Order #{item.id}</Text>
-            <Text>{item.tracking}</Text>
+            <Image
+              source={require("@/assets/v1/parcel.png")}
+              resizeMode="contain"
+              className="w-32 h-12 mb-1"
+            />
+            <View>
+              <Text className="font-bold text-lg">Order #{item.id}</Text>
+            <Text className="text-red-400">{item.tracking}</Text>
+            </View>
+            <Ionicons name="arrow-forward" size={28} color="black" />
           </TouchableOpacity>
         )}
         refreshControl={
