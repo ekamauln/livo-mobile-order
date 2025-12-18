@@ -1,19 +1,21 @@
 import { useAuth } from "@/contexts/AuthContext";
 import api from "@/services/api";
 import { Order } from "@/types/order";
-import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import { router } from "expo-router";
 import React, { useCallback, useState } from "react";
 import {
+  ActivityIndicator,
   FlatList,
   Image,
   RefreshControl,
-  StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
+
+const LogoutIcon = require('@/assets/v1/logout.png');
+const PackIcon = require('@/assets/v1/pack.png');
 
 export default function PickerDashboard() {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -53,21 +55,28 @@ export default function PickerDashboard() {
 
   if (loading) {
     return (
-      <View style={styles.container}>
-        <Text style={styles.header}>My Assignments</Text>
-        <View style={styles.center}>
-          <Text>Loading...</Text>
+      <View className="flex-1 p-4 ">
+        <Text className="text-2xl font-bold mb-4 ">My Assignments</Text>
+        <View className="flex-1 justify-center items-center">
+          <ActivityIndicator size="large" color="#0000ff" />
+          <Text className="mt-2">Loading...</Text>
         </View>
       </View>
     );
   }
 
   return (
-    <View className="px-4 py-5">
-      <View className="flex-row justify-between items-center mb-5">
-        <Text className="text-xl font-semibold">My Assignments</Text>
-        <TouchableOpacity onPress={logout}>
-          <Ionicons name="log-out-outline" size={28} color="red" />
+    <View className="flex-1 p-5 bg-[#F6F6F6]">
+      <View className="flex-row justify-between items-center mb-4">
+        <Text className="text-xl font-semibold text-gray-900">My Assignments</Text>
+        <TouchableOpacity
+          onPress={logout}
+          className="w-10 h-10 rounded-full justify-center items-center">
+          <Image
+            source={LogoutIcon}
+            className="w-6 h-6"
+            resizeMode="contain"
+          />
         </TouchableOpacity>
       </View>
       <FlatList
@@ -75,19 +84,26 @@ export default function PickerDashboard() {
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <TouchableOpacity
-            className="bg-white mb-3 px-3 py-3 rounded flex-row justify-evenly"
+            className=" bg-white mb-3 p-4 rounded-lg shadow flex-row items-center"
             onPress={() => router.push(`/picker/order/${item.id}`)}
           >
-            <Image
-              source={require("@/assets/v1/parcel.png")}
-              resizeMode="contain"
-              className="w-32 h-12 mb-1"
-            />
-            <View>
-              <Text className="font-bold text-lg">Order #{item.id}</Text>
-            <Text className="text-red-400">{item.tracking}</Text>
+            <View className="w-10 h-10 rounded-lg justify-center items-center">
+              <Image
+                source={PackIcon}
+                className="w-10 h-10"
+                resizeMode="contain"
+              />
             </View>
-            <Ionicons name="arrow-forward" size={28} color="black" />
+            <View className="flex-1 ml-3">
+              <Text className="font-bold text-lg" >Order #{item.id}</Text>
+              <Text className="text-sm text-[#F2695D]">{item.tracking}</Text>
+            </View>
+            <TouchableOpacity className="p-2">
+              <Image
+                source={require('@/assets/v1/more.png')}
+                className="w-5 h-5"
+              />
+            </TouchableOpacity>
           </TouchableOpacity>
         )}
         refreshControl={
@@ -98,55 +114,11 @@ export default function PickerDashboard() {
           />
         }
         ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>No orders assigned</Text>
+          <View className="flex justify-center align-middle py-50">
+            <Text className="text-gray-500 text-base">No orders assigned</Text>
           </View>
         }
       />
     </View>
   );
 }
-// Styles similar to previous files...
-const styles = StyleSheet.create({
-  container: { flex: 1, padding: 15 },
-  headerRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 15,
-  },
-  header: { fontSize: 22, fontWeight: "bold" },
-  logoutBtn: {
-    backgroundColor: "#ef4444",
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 6,
-  },
-  logoutBtnText: {
-    color: "white",
-    fontWeight: "bold",
-    fontSize: 12,
-  },
-  card: {
-    padding: 15,
-    backgroundColor: "white",
-    marginBottom: 10,
-    borderRadius: 8,
-  },
-  title: { fontWeight: "bold", fontSize: 16 },
-  center: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingVertical: 50,
-  },
-  emptyText: {
-    fontSize: 16,
-    color: "#999",
-  },
-});
