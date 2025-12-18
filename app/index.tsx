@@ -38,7 +38,7 @@ export default function LoginScreen() {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        className="flex-1 bg-[#09085a] justify-center"
+        className="flex-1 bg-[#FF544B] justify-center"
       >
         <StatusBar style="light" />
         <View className="px-5 w-full">
