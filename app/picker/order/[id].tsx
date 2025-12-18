@@ -9,12 +9,14 @@ import {
   Image,
   Modal,
   Platform,
-  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+
+const CompleteIcon = require('@/assets/v1/complete.png');
+const PendingIcon = require('@/assets/v1/pending.png')
 
 export default function OrderDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -172,14 +174,14 @@ export default function OrderDetail() {
 
   if (!order)
     return (
-      <View style={styles.center}>
+      <View className= "flex-1 items-center justify-center">
         <Text>Loading Order...</Text>
       </View>
     );
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{order.tracking}</Text>
+    <View className= "flex-1 bg-[#F6F6F6] p-4">
+      <Text className= " p-3 text-xl font-bold mb-4" >{order.tracking}</Text>
 
       <FlatList
         data={order.products}
@@ -188,29 +190,26 @@ export default function OrderDetail() {
           const isPicked = (item.picked_qty || 0) >= item.quantity;
           const barcode = item.product?.barcode || item.sku;
           return (
-            <View style={[styles.item, isPicked && styles.pickedItem]}>
-              <View style={{ flex: 1 }}>
-                <Text style={styles.prodName}>
+            <View className= {`p-3 flex-row items-center mb-3 shadow rounded-lg bg-white ${isPicked ?"bg-green-50 border border-green-600" : "bg-white" }`}>
+              <View className= "flex-1" >
+                <Text className= "font-semibold text-lg text-gray-800">
                   {item.product_name.split(" ").slice(0, 6).join(" ") + "..."}
                 </Text>
-                <Text style={{ color: "#666" }}>
+                <Text className= "text-gray-700">
                   Variant: {item.variant || "-"}
                 </Text>
-                <Text style={{ color: "#666" }}>
+                <Text className="text-gray-700">
                   Barcode: {barcode || "N/A"}
                 </Text>
-                <Text>
+                <Text className="text-gray-700">
                   Qty: {item.picked_qty || 0} / {item.quantity}
                 </Text>
               </View>
               <TouchableOpacity
-                style={[
-                  styles.btn,
-                  isPicked ? styles.btnSuccess : styles.btnPrimary,
-                ]}
+                className={` mt-2 px-6 py-2 rounded-md ${isPicked ? "bg-green-500" : "bg-[#F2695D]" }`}
                 onPress={() => startScan(item)}
               >
-                <Text style={{ color: "white" }}>
+                <Text className= "text-white font-semibold">
                   {isPicked ? "Edit" : "Scan"}
                 </Text>
               </TouchableOpacity>
@@ -232,25 +231,25 @@ export default function OrderDetail() {
           inputRef.current?.clear();
         }}
       >
-        <View style={styles.scanContainer}>
+        <View className= "flex-1 items-center justify-center bg-white p-5">
           {targetProduct?.product?.image && (
             <Image
               source={{ uri: targetProduct.product.image }}
-              style={styles.productImage}
+              className= "w-52 h-52 mb-5 rounded-lg"
               resizeMode="contain"
             />
           )}
 
-          <Text style={styles.scanTitle}>
+          <Text className= "text-lg font-bold mb-2 text-center">
             Scanning: {targetProduct?.product_name}
           </Text>
-          <Text style={styles.scanBarcode}>
+          <Text className= "text-gray-500 mb-5 text-center">
             Expected Barcode:{" "}
             {targetProduct?.product?.barcode || targetProduct?.sku || "N/A"}
           </Text>
 
           <TouchableOpacity
-            style={styles.closeScanBtn}
+            className= "bg-[#F2695D] px-6 py-3 rounded-lg"
             onPress={() => {
               setScanModalVisible(false);
               setIsListening(false);
@@ -261,13 +260,13 @@ export default function OrderDetail() {
               inputRef.current?.clear();
             }}
           >
-            <Text style={{ color: "white", fontWeight: "bold" }}>Close</Text>
+            <Text className=  "text-white font-bold">Close</Text>
           </TouchableOpacity>
 
           {/* Hidden TextInput to capture barcode scanner input */}
           <TextInput
             ref={inputRef}
-            style={styles.hiddenInput}
+            className= "absolute -left-[1000px] w-1 h-1 opacity-0"
             onChangeText={(text) => {
               inputBuffer.current = text;
 
@@ -315,32 +314,32 @@ export default function OrderDetail() {
         transparent={true}
         onRequestClose={() => setQuantityModalVisible(false)}
       >
-        <View style={styles.quantityOverlay}>
-          <View style={styles.quantityModalContent}>
-            <Text style={styles.quantityTitle}>Match Found!</Text>
-            <Text style={styles.quantityLabel}>
+        <View className= "flex-1   bg-black/50 items-center justify-center">
+          <View className= "bg-white rounded-xl p-5 w-4/5">
+            <Text className= "text-lg font-bold mb-3 tex-center">Match Found!</Text>
+            <Text className= "text-center mb-3 text-[#333] text-sm ">
               Enter quantity for {targetProduct?.product_name || "Product"}:
             </Text>
             <TextInput
-              style={styles.quantityTextInput}
+              className= "border border-gray-300 rounded-lg p-3 mb-4"
               keyboardType="number-pad"
               placeholder="Quantity"
               value={quantityInput}
               onChangeText={setQuantityInput}
               autoFocus
             />
-            <View style={styles.quantityButtonsRow}>
+            <View className= "flex-row">
               <TouchableOpacity
-                style={styles.quantityCancelBtn}
+                className= "flex-1 bg-gray-400 py-3 rounded-lg mr-1 items-center"
                 onPress={() => {
                   setQuantityModalVisible(false);
                   setTargetProduct(null);
                 }}
               >
-                <Text style={styles.quantityBtnText}>Cancel</Text>
+                <Text className= "text-white font-bold">Cancel</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={styles.quantityConfirmBtn}
+                className="flex-1 bg-emerald-500 py-3 rounded-lg ml-1 items-center"
                 onPress={() => {
                   if (targetProduct) {
                     handleQuantityInput(targetProduct.id, quantityInput);
@@ -349,7 +348,7 @@ export default function OrderDetail() {
                   setTargetProduct(null);
                 }}
               >
-                <Text style={styles.quantityBtnText}>Confirm</Text>
+                <Text className="text-white font-bold">Confirm</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -357,23 +356,22 @@ export default function OrderDetail() {
       </Modal>
 
       {/* Complete and Pending Buttons */}
-      <View style={styles.bottomButtonsContainer}>
+      <View className= "flex-row p-2 bg-gray-100 border-t border-gray-300">
         <TouchableOpacity
-          style={[styles.bottomBtn, styles.bottomBtnPending]}
+          className= "flex-1 flex-row items-center justify-center gap-2 mx-1 px-6 py-3 rounded-lg bg-[#F2695D] disabled:opacity-50"
           disabled={isSubmitting}
           onPress={handlePendingOrder}
         >
-          <Text style={styles.bottomBtnText}>Pending</Text>
+          <Image source={PendingIcon} className="w-6 h-6" />
+          <Text className= "text-white font-semibold">Pending</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[
-            styles.bottomBtn,
-            !isAllPickedComplete() && styles.bottomBtnDisabled,
-          ]}
+          className={`flex-1 flex-row items-center justify-center gap-2 mx-1 px-6 py-3 rounded-lg ${isAllPickedComplete() ? "bg-emerald-500" : "bg-black" }`}
           disabled={!isAllPickedComplete() || isSubmitting}
           onPress={handleCompleteOrder}
         >
-          <Text style={styles.bottomBtnText}>Complete</Text>
+          <Image source={CompleteIcon} className="w-5 h-5" />
+          <Text className= "text-white font-semibold">Complete</Text>
         </TouchableOpacity>
       </View>
 
@@ -384,44 +382,44 @@ export default function OrderDetail() {
         transparent={true}
         onRequestClose={() => setCredentialModalVisible(false)}
       >
-        <View style={styles.quantityOverlay}>
-          <View style={styles.quantityModalContent}>
-            <Text style={styles.quantityTitle}>Coordinator Login</Text>
-            <Text style={styles.quantityLabel}>
+        <View className= "flex-1 bg-black/50 items-center justify-center">
+          <View className="bg-white rounded-xl p-5 w-4/5">
+            <Text className= "text-lg font-bold mb-3 text-center">Coordinator Login</Text>
+            <Text className= "text-base text-gray-700  mb-4 text-center">
               Enter coordinator credentials to mark as pending:
             </Text>
             <TextInput
-              style={styles.quantityTextInput}
+              className="border border-gray-300 rounded-lg  p-3 mb-3"
               placeholder="Username"
               value={coordinatorUsername}
               onChangeText={setCoordinatorUsername}
               autoCapitalize="none"
             />
             <TextInput
-              style={styles.quantityTextInput}
+              className= "border border-gray-300 rounded-lg p-3 mb-4"
               placeholder="Password"
               secureTextEntry
               value={coordinatorPassword}
               onChangeText={setCoordinatorPassword}
               autoCapitalize="none"
             />
-            <View style={styles.quantityButtonsRow}>
+            <View className= "flex-row">
               <TouchableOpacity
-                style={styles.quantityCancelBtn}
+                className= "flex-1 bg-gray-400 py-3 rounded-lg mr-1 items-center"
                 onPress={() => {
                   setCredentialModalVisible(false);
                   setCoordinatorUsername("");
                   setCoordinatorPassword("");
                 }}
               >
-                <Text style={styles.quantityBtnText}>Cancel</Text>
+                <Text className= "text-white font-bold">Cancel</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={styles.quantityConfirmBtn}
+                className= "flex-1 bg-emerald-500 py-3 rounded-lg ml-1 items-center"
                 disabled={isSubmitting}
                 onPress={handleSubmitPending}
               >
-                <Text style={styles.quantityBtnText}>
+                <Text className= "text-white font-bold">
                   {isSubmitting ? "Submitting..." : "Submit"}
                 </Text>
               </TouchableOpacity>
@@ -432,151 +430,3 @@ export default function OrderDetail() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, padding: 15, backgroundColor: "#f5f5f5" },
-  center: { flex: 1, justifyContent: "center", alignItems: "center" },
-  title: { fontSize: 20, fontWeight: "bold", marginBottom: 15 },
-  item: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 15,
-    backgroundColor: "white",
-    marginBottom: 10,
-    borderRadius: 8,
-    elevation: 1,
-  },
-  pickedItem: {
-    backgroundColor: "#e8f5e9",
-    borderColor: "green",
-    borderWidth: 1,
-  },
-  prodName: { fontWeight: "bold", fontSize: 16, marginBottom: 4 },
-  btn: { paddingVertical: 8, paddingHorizontal: 15, borderRadius: 6 },
-  btnPrimary: { backgroundColor: "#2196F3" },
-  btnSuccess: { backgroundColor: "#4CAF50" },
-  scanContainer: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: "#fff",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  productImage: {
-    width: 200,
-    height: 200,
-    marginBottom: 20,
-    borderRadius: 8,
-  },
-  scanTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 10,
-    textAlign: "center",
-  },
-  scanBarcode: {
-    fontSize: 14,
-    color: "#666",
-    marginBottom: 20,
-    textAlign: "center",
-  },
-  closeScanBtn: {
-    backgroundColor: "#ef4444",
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    marginTop: 20,
-  },
-  hiddenInput: {
-    position: "absolute",
-    left: -1000,
-    width: 1,
-    height: 1,
-    opacity: 0,
-  },
-  quantityOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  quantityModalContent: {
-    backgroundColor: "white",
-    borderRadius: 12,
-    padding: 20,
-    width: "80%",
-    elevation: 5,
-  },
-  quantityTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 12,
-    textAlign: "center",
-  },
-  quantityLabel: {
-    fontSize: 14,
-    marginBottom: 12,
-    textAlign: "center",
-    color: "#333",
-  },
-  quantityTextInput: {
-    borderWidth: 1,
-    borderColor: "#ddd",
-    borderRadius: 8,
-    padding: 10,
-    marginBottom: 16,
-    fontSize: 16,
-  },
-  quantityButtonsRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  quantityCancelBtn: {
-    flex: 1,
-    backgroundColor: "#9ca3af",
-    paddingVertical: 10,
-    borderRadius: 8,
-    alignItems: "center",
-    marginRight: 5,
-  },
-  quantityConfirmBtn: {
-    flex: 1,
-    backgroundColor: "#10b981",
-    paddingVertical: 10,
-    borderRadius: 8,
-    alignItems: "center",
-    marginLeft: 5,
-  },
-  quantityBtnText: {
-    color: "white",
-    fontWeight: "bold",
-    fontSize: 14,
-  },
-  bottomButtonsContainer: {
-    flexDirection: "row",
-    padding: 15,
-    backgroundColor: "#f5f5f5",
-    borderTopWidth: 1,
-    borderTopColor: "#ddd",
-  },
-  bottomBtn: {
-    flex: 1,
-    backgroundColor: "#10b981",
-    paddingVertical: 14,
-    borderRadius: 8,
-    alignItems: "center",
-    justifyContent: "center",
-    marginHorizontal: 5,
-  },
-  bottomBtnDisabled: {
-    backgroundColor: "#d1d5db",
-  },
-  bottomBtnPending: {
-    backgroundColor: "#f59e0b",
-  },
-  bottomBtnText: {
-    color: "white",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-});
