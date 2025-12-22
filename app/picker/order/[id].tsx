@@ -16,7 +16,8 @@ import {
 } from "react-native";
 
 const CompleteIcon = require('@/assets/v1/complete.png');
-const PendingIcon = require('@/assets/v1/pending.png')
+const PendingIcon = require('@/assets/v1/pending.png');
+const CancelIcon = require('@/assets/v1/cancel.png');
 
 export default function OrderDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -218,6 +219,7 @@ export default function OrderDetail() {
         }}
       />
 
+{/* Match Modal */}
       <Modal
         visible={scanModalVisible}
         animationType="slide"
@@ -330,16 +332,16 @@ export default function OrderDetail() {
             />
             <View className= "flex-row">
               <TouchableOpacity
-                className= "flex-1 bg-gray-400 py-3 rounded-lg mr-1 items-center"
+                className= "flex-1 bg-[#F2695D] py-3 rounded-lg mr-1 items-center"
                 onPress={() => {
                   setQuantityModalVisible(false);
                   setTargetProduct(null);
                 }}
               >
-                <Text className= "text-white font-bold">Cancel</Text>
+                <Text className= "text-white font-bold ">Cancel</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                className="flex-1 bg-emerald-500 py-3 rounded-lg ml-1 items-center"
+                className="flex-1 bg-[#000000] py-3 rounded-lg ml-1 items-center"
                 onPress={() => {
                   if (targetProduct) {
                     handleQuantityInput(targetProduct.id, quantityInput);
@@ -405,7 +407,7 @@ export default function OrderDetail() {
             />
             <View className= "flex-row">
               <TouchableOpacity
-                className= "flex-1 bg-gray-400 py-3 rounded-lg mr-1 items-center"
+                className= "flex-1 bg-[#F2695D] py-3 rounded-lg mr-1 items-center"
                 onPress={() => {
                   setCredentialModalVisible(false);
                   setCoordinatorUsername("");
@@ -415,7 +417,7 @@ export default function OrderDetail() {
                 <Text className= "text-white font-bold">Cancel</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                className= "flex-1 bg-emerald-500 py-3 rounded-lg ml-1 items-center"
+                className= "flex-1 bg-[#000000] py-3 rounded-lg ml-1 items-center"
                 disabled={isSubmitting}
                 onPress={handleSubmitPending}
               >
